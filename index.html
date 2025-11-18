@@ -1,0 +1,20 @@
+<input type="text" id="pseudo" placeholder="Votre pseudo">
+<input type="text" id="message" placeholder="Votre message">
+<button onclick="send()">Envoyer</button>
+
+<div id="chatbox"></div>
+
+<script>
+    const ws = new WebSocket("ws://localhost:8080");
+
+    ws.onmessage = ({data}) => {
+        const msg = JSON.parse(data);
+        document.getElementById("chatbox").innerHTML += `<br><b>${msg.user}</b> : ${msg.message}`;
+    };
+
+    function send() {
+        const user = document.getElementById("pseudo").value;
+        const message = document.getElementById("message").value;
+        ws.send(JSON.stringify({ user, message }));
+    }
+</script>
